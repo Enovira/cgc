@@ -32,7 +32,7 @@ class App : Application(), ViewModelStoreOwner {
         mViewModelStore = ViewModelStore()
         eventVM = ViewModelProvider(this)[EventViewModel::class.java]
 
-        LogUtils.getConfig().isLogSwitch = false //日志总开关
+        LogUtils.getConfig().isLogSwitch = true //日志总开关
         LogUtils.getConfig().isLog2FileSwitch = false //文件总开关
         LogUtils.getConfig().dir = path
     }

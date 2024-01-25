@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <permission-group android:name="${applicationId}.andpermission"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
         android:name=".App"
@@ -61,6 +63,13 @@
             </intent-filter>
         </activity>
         <service android:name=".service.CustomService" />
+        <receiver android:name=".receiver.SystemBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter> <!-- 在intentFilter中添加系统启动广播 -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
     <queries>
         <package android:name="com.dlxx.mam.Internal"/>

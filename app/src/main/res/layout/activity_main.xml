@@ -4,31 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="vm"
             type="com.yxh.cgc.view.vm.MainActivityVM" />
     </data>
 
     <com.google.android.flexbox.FlexboxLayout
-        app:flexDirection="column"
-        app:justifyContent="center"
-        app:alignItems="center"
-        app:flexWrap="nowrap"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:alignItems="center"
+        app:flexDirection="column"
+        app:flexWrap="nowrap"
+        app:justifyContent="center"
         tools:context=".view.MainActivity">
 
         <Button
             android:id="@+id/toChatActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="toChatActivity"/>
+            android:text="toChatActivity" />
 
         <Button
             android:id="@+id/toSerialPortActivity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="toSerialPortActivity"/>
+            android:text="toSerialPortActivity" />
+
+        <Button
+            android:id="@+id/startService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{vm.onClick}"
+            android:text="启动服务" />
+
+        <Button
+            android:id="@+id/stopService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{vm.onClick}"
+            android:text="关闭服务" />
 
 
     </com.google.android.flexbox.FlexboxLayout>

@@ -1,5 +1,6 @@
 package com.yxh.cgc.service
 
+import com.yxh.cgc.global.Cons
 import com.yxh.cgc.utils.tryRead
 import java.io.InputStream
 import java.io.OutputStream
@@ -15,7 +16,7 @@ class SocketThread(private val commandCallback: (ByteArray?) -> Unit) : Thread()
     private var outputStream: OutputStream? = null
 
     override fun run() {
-        val serviceSocket = ServerSocket(18952)
+        val serviceSocket = ServerSocket(Cons.serverSocketPort)
         while (true) {
                 val client = serviceSocket.accept()
                 try {

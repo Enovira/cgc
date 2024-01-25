@@ -1,10 +1,12 @@
 package com.yxh.cgc.service
 
+import android.app.Notification.Action
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -16,9 +18,11 @@ import androidx.core.app.NotificationCompat
 import com.yxh.cgc.App
 import com.yxh.cgc.R
 import com.yxh.cgc.bean.SocketConfig
+import com.yxh.cgc.global.Cons
 import com.yxh.cgc.utils.CustomNetworkUtil
 import com.yxh.cgc.utils.SerialPortManager
 import com.yxh.cgc.view.ChatActivity
+import java.lang.Exception
 import java.net.ServerSocket
 
 class CustomService : Service() {
@@ -32,7 +36,7 @@ class CustomService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        serverSocket = ServerSocket(18952)
+        serverSocket = ServerSocket(Cons.serverSocketPort)
         mHandler.sendEmptyMessage(1)
     }
 
@@ -41,7 +45,6 @@ class CustomService : Service() {
         intent?.let {
             when (it.action) {
                 "com.yxh.cgc.startService" -> {
-                    val port = 18952
                     val seq = it.getStringExtra("message") ?: "null"
                     clearChatServerThread()
                     if (chatServerThread == null) {
@@ -58,7 +61,15 @@ class CustomService : Service() {
                         chatServerThread?.start()
                         startCustomForegroundService(seq)
                     }
-                    launch3rdAppResult(port, seq)
+                    packageManager.getLaunchIntentForPackage("com.dlxx.mam.Internal")?.let { p1 ->
+                        p1.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        try {
+                            startActivity(p1)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }
+//                    launch3rdAppResult(Cons.serverSocketPort, seq)
                 }
 
                 "com.yxh.cgc.sendMessage" -> {
@@ -134,6 +145,7 @@ class CustomService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        serverSocket.close()
         clearChatServerThread()
     }
 
@@ -153,7 +165,7 @@ class CustomService : Service() {
 
     private val mHandler: Handler = Handler(Looper.getMainLooper()) {
         if (it.what == 0) { //采集指令，此处只做透传
-            SerialPortManager.instance().sendData(it.obj as ByteArray)
+            SerialPortManager.instance().sendData(it.obj.toString())
 //            val command = String(it.obj as ByteArray)
 //            if (command.contains("weight")) {
 //                chatServerThread?.sendMessage("{\n\"type\":\"scale_weight\"\n\"result\": 0.0\n\"power\"10}")

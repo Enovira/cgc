@@ -20,7 +20,7 @@ class SocketChatServerThread(
     private val serverSocket: ServerSocket,
     private val commandCallback: (String?) -> Unit,
 ) : Thread() {
-    private lateinit var socket: Socket
+    private var socket: Socket? = null
     private var timerManager: TimerManager? = null
     private var lastReceivedResponsePacketTime: Long = 0
 
@@ -29,26 +29,27 @@ class SocketChatServerThread(
 
     override fun run() {
         LogUtils.d("正在创建socket服务端")
-        while (true) {
+        while (!interrupted()) {
             try {
                 socket = serverSocket.accept()
                 LogUtils.d("socket连接成功")
                 commandCallback.invoke(null) // 通过回调函数，开启串口
 //            startHeartBeatTimer() // 开启心跳计时器
-                socket.getInputStream()?.also {
+                socket?.getInputStream()?.also {
                     bufferedReader = BufferedReader(InputStreamReader(it))
                 }
-                outputStream = socket.getOutputStream()
-                while (socket.isConnected) {
+                outputStream = socket?.getOutputStream()
+                while (socket?.isConnected == true) {
                     bufferedReader?.let { reader ->
                         handleMessage(reader.readLine())
                     }
                 }
-                socket.close()
+                socket?.close()
             } catch (e: Exception) {
                 e.printStackTrace()
             } finally {
-                socket.close()
+                LogUtils.d("异常断开")
+                socket?.close()
             }
         }
     }
@@ -108,7 +109,7 @@ class SocketChatServerThread(
         outputStream?.flush()
         outputStream?.close()
         bufferedReader?.close()
-        socket.close()
+        socket?.close()
     }
 
     private fun handleMessage(str: String) {
