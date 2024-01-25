@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.yxh.cgc'
+    compileSdk 33
+
+    defaultConfig {
+        applicationId "com.yxh.cgc"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    android.applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = 'cgc_' + new Date().format("yyMMddHHmmss").toString() + ".apk"
+        }
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    viewBinding.enabled = true
+    dataBinding.enabled = true
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+    // 防止倒灌LiveData
+    implementation 'com.kunminx.arch:unpeek-livedata:7.2.0-beta1'
+//    // leakCanary 内存泄漏检测工具
+//    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    // KLog日志打印模块
+    implementation 'com.github.zhaokaiqiang.klog:library:0.0.1'
+    // flexBoxLayout 自适应流式布局
+    implementation 'com.google.android:flexbox:1.0.0'
+
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+
+    // 串口通信第三方SDK
+    implementation 'com.github.freyskill:SerialPortHelper:v1.0.1'
+
+    //工具类大全
+    implementation 'com.blankj:utilcodex:1.31.0'
+}

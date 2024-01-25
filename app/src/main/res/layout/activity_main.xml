@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.yxh.cgc.view.vm.MainActivityVM" />
+    </data>
+
+    <com.google.android.flexbox.FlexboxLayout
+        app:flexDirection="column"
+        app:justifyContent="center"
+        app:alignItems="center"
+        app:flexWrap="nowrap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.MainActivity">
+
+        <Button
+            android:id="@+id/toChatActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toChatActivity"/>
+
+        <Button
+            android:id="@+id/toSerialPortActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="toSerialPortActivity"/>
+
+
+    </com.google.android.flexbox.FlexboxLayout>
+</layout>

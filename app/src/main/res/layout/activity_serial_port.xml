@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.yxh.cgc.view.vm.SerialPortActVM" />
+    </data>
+
+    <com.google.android.flexbox.FlexboxLayout
+        app:flexDirection="column"
+        app:alignItems="center"
+        app:justifyContent="center"
+        app:flexWrap="nowrap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/toggle_serial_port"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{vm.switchSerialPort}"
+                android:text="切换串口开关"/>
+
+            <TextView
+                android:text="@{vm.serialPortStatus == true ? @string/opened : @string/closed}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:minWidth="300dp">
+
+            <TextView
+                android:id="@+id/label_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="接收到的消息"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/clean_received"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清空"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <EditText
+            android:id="@+id/received_message_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:background="@drawable/bg_edittext_round"
+            android:gravity="start"
+            android:text="@{vm.receivedMessageContent}"
+            android:hint="接收到的消息"
+            android:inputType="text"
+            android:enabled="false"
+            android:minWidth="300dp"
+            android:minHeight="100dp"
+            android:padding="4dp"
+            android:textSize="12sp" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:minWidth="300dp">
+
+            <TextView
+                android:id="@+id/label_send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="发送消息"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/clean_send_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清空"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <EditText
+            android:id="@+id/send_message_display"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:background="@drawable/bg_edittext_round"
+            android:gravity="start"
+            android:afterTextChanged="@{vm.doMessageAfterTextChanged}"
+            android:text="@{vm.sentMessageContent}"
+            android:hint="发送的消息"
+            android:inputType="text"
+            android:minWidth="300dp"
+            android:minHeight="100dp"
+            android:padding="4dp"
+            android:textSize="12sp" />
+
+        <Button
+            android:id="@+id/send_message"
+            android:onClick="@{() -> vm.sendMessage()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送消息" />
+
+    </com.google.android.flexbox.FlexboxLayout>
+</layout>
