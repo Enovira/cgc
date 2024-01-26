@@ -36,7 +36,7 @@ class ChatActivity : BaseActivity<EmptyViewModel, ActivityChatBinding>() {
     override fun initView() {
         seq = intent.data?.getQueryParameter("seq") ?: "null"
         binding.receivedMessageDisplay.setText("seq: $seq")
-        startService(1, seq)
+//        startService(1, seq)
 
         initListener()
         initObserver()

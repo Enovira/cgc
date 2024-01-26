@@ -28,9 +28,9 @@ class SocketChatServerThread(
     private var outputStream: OutputStream? = null
 
     override fun run() {
-        LogUtils.d("正在创建socket服务端")
         while (!interrupted()) {
             try {
+                LogUtils.d("正在创建socket服务端")
                 socket = serverSocket.accept()
                 LogUtils.d("socket连接成功")
                 commandCallback.invoke(null) // 通过回调函数，开启串口

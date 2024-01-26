@@ -2,4 +2,7 @@
     <string name="app_name">cgc</string>
     <string name="opened">已开启</string>
     <string name="closed">已关闭</string>
+    <string name="prompt_dont_close_running_service">正在连接时请勿关闭该服务!</string>
+    <string name="close">关闭</string>
+    <string name="cancel">取消</string>
 </resources>

@@ -1,12 +1,10 @@
 package com.yxh.cgc.service
 
-import android.app.Notification.Action
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Handler
@@ -15,20 +13,22 @@ import android.os.Looper
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.blankj.utilcode.util.LogUtils
 import com.yxh.cgc.App
 import com.yxh.cgc.R
 import com.yxh.cgc.bean.SocketConfig
 import com.yxh.cgc.global.Cons
-import com.yxh.cgc.utils.CustomNetworkUtil
 import com.yxh.cgc.utils.SerialPortManager
-import com.yxh.cgc.view.ChatActivity
-import java.lang.Exception
+import com.yxh.cgc.view.MainActivity
 import java.net.ServerSocket
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class CustomService : Service() {
 
     private var chatServerThread: SocketChatServerThread? = null
     private lateinit var serverSocket: ServerSocket
+    private val simpleDataFormat: SimpleDateFormat = SimpleDateFormat("hh:mm:ss", Locale.CHINA)
 
     override fun onBind(intent: Intent?): IBinder? {
         return null
@@ -61,15 +61,15 @@ class CustomService : Service() {
                         chatServerThread?.start()
                         startCustomForegroundService(seq)
                     }
-                    packageManager.getLaunchIntentForPackage("com.dlxx.mam.Internal")?.let { p1 ->
-                        p1.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                        try {
-                            startActivity(p1)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-//                    launch3rdAppResult(Cons.serverSocketPort, seq)
+//                    packageManager.getLaunchIntentForPackage("com.dlxx.mam.Internal")?.let { p1 ->
+//                        p1.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+//                        try {
+//                            startActivity(p1)
+//                        } catch (e: Exception) {
+//                            e.printStackTrace()
+//                        }
+//                    }
+                    launch3rdAppResult(Cons.serverSocketPort, seq)
                 }
 
                 "com.yxh.cgc.sendMessage" -> {
@@ -95,12 +95,12 @@ class CustomService : Service() {
         val notification = NotificationCompat.Builder(this, "customChannelId")
             .setSmallIcon(R.mipmap.ic_launcher_round)
 //            .setContentTitle("cgcCustomService")
-            .setContentTitle("socketService?seq=$seq")
-            .setContentText("仓管车socket服务正在运行中。。。${System.currentTimeMillis()}")
+            .setContentTitle("仓管车后台服务")
+            .setContentText("仓管车socket后台服务正在运行中，请勿关闭 - ${simpleDataFormat.format(System.currentTimeMillis())}")
             .setTicker("titleBar's title") //设置状态栏的标题
             .setAutoCancel(true) //打开程序后图标消失
             .setOngoing(true).apply {
-                val i1 = Intent(this@CustomService, ChatActivity::class.java)
+                val i1 = Intent(this@CustomService, MainActivity::class.java)
                 val p1 = PendingIntent.getActivity(
                     this@CustomService,
                     201,
@@ -165,6 +165,7 @@ class CustomService : Service() {
 
     private val mHandler: Handler = Handler(Looper.getMainLooper()) {
         if (it.what == 0) { //采集指令，此处只做透传
+            LogUtils.d("接收到仓管车命令: ${it.obj}")
             SerialPortManager.instance().sendData(it.obj.toString())
 //            val command = String(it.obj as ByteArray)
 //            if (command.contains("weight")) {

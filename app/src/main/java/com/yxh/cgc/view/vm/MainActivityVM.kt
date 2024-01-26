@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel
 import com.yxh.cgc.R
 import com.yxh.cgc.service.CustomService
 import com.yxh.cgc.view.ChatActivity
+import com.yxh.cgc.view.PromptDialog
 
 class MainActivityVM(private val application: Application) : AndroidViewModel(application), View.OnClickListener {
     override fun onClick(v: View?) {

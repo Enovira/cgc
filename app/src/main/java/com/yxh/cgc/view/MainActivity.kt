@@ -11,6 +11,7 @@ import androidx.core.app.ActivityCompat
 import com.yxh.cgc.R
 import com.yxh.cgc.base.BaseActivity
 import com.yxh.cgc.databinding.ActivityMainBinding
+import com.yxh.cgc.service.CustomService
 import com.yxh.cgc.utils.PreventFastClickListener
 import com.yxh.cgc.utils.setPreventFastClickListener
 import com.yxh.cgc.view.vm.MainActivityVM
@@ -50,6 +51,18 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
                 startActivity(p0)
             }
         })
+
+        binding.stopService.setOnClickListener {
+            PromptDialog(object : PromptDialogClickListener{
+                override fun onClick(dialog: PromptDialog, action: Int) {
+                    if (action == 1) {
+                        application.stopService(Intent(application, CustomService::class.java))
+                    }
+                    dialog.dismiss()
+                }
+
+            }).show(supportFragmentManager, "")
+        }
 
     }
 
