@@ -24,6 +24,8 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
 
     override fun initView() {
 
+        val seq = intent.getStringExtra("seq")
+
         binding.vm = viewModel
 
         // 必须同意获取悬浮窗权限才能实现应用自启动
@@ -35,6 +37,7 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
         }
 
         checkPermission()
+
 
         binding.toSerialPortActivity.setPreventFastClickListener(object :
             PreventFastClickListener() {
@@ -51,6 +54,15 @@ class MainActivity : BaseActivity<MainActivityVM, ActivityMainBinding>() {
                 startActivity(p0)
             }
         })
+
+        binding.startService.setOnClickListener {
+            startService(Intent(application, CustomService::class.java).apply {
+                action = "com.yxh.cgc.startService"
+                seq?.let {
+                    putExtra("seq", it)
+                }
+            })
+        }
 
         binding.stopService.setOnClickListener {
             PromptDialog(object : PromptDialogClickListener{

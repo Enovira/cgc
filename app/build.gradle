@@ -5,14 +5,14 @@ plugins {
 
 android {
     namespace 'com.yxh.cgc'
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.yxh.cgc"
         minSdk 24
         targetSdk 33
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,7 +29,7 @@ android {
     }
     android.applicationVariants.all { variant ->
         variant.outputs.all {
-            outputFileName = 'cgc_' + new Date().format("yyMMddHHmmss").toString() + ".apk"
+            outputFileName = 'cgc_' + variant.versionName + "_" + new Date().format("yyyyMMddHHmm").toString() + ".apk"
         }
     }
     kotlinOptions {

@@ -26,22 +26,28 @@ import kotlinx.coroutines.launch
 
 class ChatActivity : BaseActivity<EmptyViewModel, ActivityChatBinding>() {
 
-
-    private lateinit var seq: String
-
     override fun getLayoutId(): Int {
         return R.layout.activity_chat
     }
 
     override fun initView() {
-        seq = intent.data?.getQueryParameter("seq") ?: "null"
-        binding.receivedMessageDisplay.setText("seq: $seq")
-//        startService(1, seq)
+        intent.data?.getQueryParameter("seq")?.let {
+            startActivity(Intent(this, MainActivity::class.java).apply {
+                putExtra("seq", it)
+            })
+            finish()
+        } ?: kotlin.run {
+            Toast.makeText(this@ChatActivity, "无法获取i国网传回的标记", Toast.LENGTH_SHORT).show()
+        }
 
-        initListener()
-        initObserver()
-
-        checkPermission()
+//        seq = intent.data?.getQueryParameter("seq") ?: "null"
+//        binding.receivedMessageDisplay.setText("seq: $seq")
+////        startService(1, seq)
+//
+//        initListener()
+//        initObserver()
+//
+//        checkPermission()
     }
 
     private fun initObserver() {
@@ -55,7 +61,7 @@ class ChatActivity : BaseActivity<EmptyViewModel, ActivityChatBinding>() {
         binding.startSocket.setPreventFastClickListener(object :
             PreventFastClickListener() {
             override fun onPreventFastClick(v: View?) {
-                startService(1, seq)
+//                startService(1, seq)
             }
         })
 
@@ -124,8 +130,8 @@ class ChatActivity : BaseActivity<EmptyViewModel, ActivityChatBinding>() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        stopService(Intent(this, CustomService::class.java))
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        stopService(Intent(this, CustomService::class.java))
+//    }
 }

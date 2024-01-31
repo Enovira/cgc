@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import com.blankj.utilcode.util.LogUtils
 import com.yxh.cgc.global.EventViewModel
+import com.yxh.cgc.global.UncaughtExceptionHandler
 import java.io.File
 import java.lang.ref.WeakReference
 
@@ -31,6 +32,7 @@ class App : Application(), ViewModelStoreOwner {
         context = WeakReference(applicationContext)
         mViewModelStore = ViewModelStore()
         eventVM = ViewModelProvider(this)[EventViewModel::class.java]
+        UncaughtExceptionHandler.initUncaughtExceptionHandler(this)
 
         LogUtils.getConfig().isLogSwitch = true //日志总开关
         LogUtils.getConfig().isLog2FileSwitch = false //文件总开关

@@ -45,7 +45,6 @@ class CustomService : Service() {
         intent?.let {
             when (it.action) {
                 "com.yxh.cgc.startService" -> {
-                    val seq = it.getStringExtra("message") ?: "null"
                     clearChatServerThread()
                     if (chatServerThread == null) {
                         chatServerThread =
@@ -59,17 +58,20 @@ class CustomService : Service() {
                                 }
                             })
                         chatServerThread?.start()
-                        startCustomForegroundService(seq)
+                        startCustomForegroundService()
                     }
-//                    packageManager.getLaunchIntentForPackage("com.dlxx.mam.Internal")?.let { p1 ->
-//                        p1.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//                        try {
-//                            startActivity(p1)
-//                        } catch (e: Exception) {
-//                            e.printStackTrace()
-//                        }
-//                    }
-                    launch3rdAppResult(Cons.serverSocketPort, seq)
+                    it.getStringExtra("seq")?.let { seq ->
+                        launch3rdAppResult(Cons.serverSocketPort, seq)
+                    } ?: kotlin.run {
+                        packageManager.getLaunchIntentForPackage("com.dlxx.mam.Internal")?.let { p1 ->
+                            p1.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                            try {
+                                startActivity(p1)
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                        }
+                    }
                 }
 
                 "com.yxh.cgc.sendMessage" -> {
@@ -84,7 +86,7 @@ class CustomService : Service() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun startCustomForegroundService(seq: String) {
+    fun startCustomForegroundService() {
         val cmm = getSystemService(NotificationManager::class.java)
         val notificationChannel = NotificationChannel(
             "customChannelId",
